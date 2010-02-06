@@ -1,0 +1,19 @@
+<IfModule mod_rewrite.c>
+Options FollowSymLinks
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-fq
+ 
+#Rewrites ignores these folders.
+#RewriteRule ^.*$ - [PT]
+RewriteRule ^static/.*$ - [PT]
+RewriteRule ^docs/.*$ - [PT]
+ 
+#Pretty URL rewrites
+RewriteRule ^([^/.]+)/?$ w3/index.php?action=$1 [L]
+RewriteRule ^([^/.]+)/([^/.]+)/?$ w3/index.php?action=$1&section=$2 [L]
+RewriteRule ^([^/.]+)/([^/.]+)/([^/.]+)/?$ w3/index.php?action=$1&section=$2&subsection=$3 [L]
+RewriteRule ^([^/.]+)/([^/.]+)/([^/.]+)/([^/.]+)/?$ w3/index.php?action=$1&section=$2&subsection=$3&do=$4 [L]
+
+#Error
+ErrorDocument 404 /index.php?action=error&section=404
+</IfModule>

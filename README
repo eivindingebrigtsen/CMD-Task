@@ -1,0 +1,8 @@
+/**
+ * @Project:				CMD-Task	
+ * @Scope:					Real Simple Task Management
+ * @Assigned to:			Eivind Ingebrigtsen (EI) 
+ * @Explain:
+ * The configuration for the project is in the /etc/config.php  
+ * SQL for the database is in /etc/db.sql
+**/
