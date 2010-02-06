@@ -9,7 +9,6 @@ echo <<<HTML
 			* core.libs.js includes: underscore, jquery, sizzle, jquery ui 
 		-->
 		<script src="static/javascript/core.libs.js" type="text/javascript" charset="utf-8"></script>       
-		<script src="static/javascript/core.libs.js" type="text/javascript" charset="utf-8"></script>       
 		<!-- 
 			* Internal extensions used inside the application 
 			* core.ext.js includes: i18n, utilities 

@@ -56,6 +56,9 @@ class Tasker  {
 			case 'update':   
 			 	self::getItem(Site::$subsection);
 			break;
+			case 'import':
+				self::getImportInterface();
+			break;
 			case 'setup':
 				self::setupDB();
 			break;
@@ -242,6 +245,10 @@ class Tasker  {
 	public function getAside(){
 		$markup[] = Keywords::outputAsideGUI();
 		return implode($markup, '');
+	}
+	public function getImportInterface(){
+	  Site::$html = Site::parseFile('view/tasker/import.html');  
+	  Site::$inlinejs .= Site::parseFile('../static/javascript/import.js');	
 	}
 	public function getInterface(){
 		self::$keywords = new Keywords();
