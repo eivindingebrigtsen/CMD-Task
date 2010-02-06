@@ -11,4 +11,7 @@
  * @Explain:
  * The configuration for the project is in the /etc/config.php  
  * SQL for the database is in /etc/db.sql
+ *
+ * Go to your localhost/path/to/cmd-task/tasker
+ * Keyphrase is abc 
 **/
