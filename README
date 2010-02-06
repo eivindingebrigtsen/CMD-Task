@@ -2,6 +2,12 @@
  * @Project:				CMD-Task	
  * @Scope:					Real Simple Task Management
  * @Assigned to:			Eivind Ingebrigtsen (EI) 
+	
+	External libraries in use are: 
+		FirePHP => output handling
+		Scaffold css => for easier css writing 
+		jQuery => javascript framework
+
  * @Explain:
  * The configuration for the project is in the /etc/config.php  
  * SQL for the database is in /etc/db.sql

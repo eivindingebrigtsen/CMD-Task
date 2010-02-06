@@ -79,9 +79,6 @@ class Site {
 				Auth::handleAuth();
 			return;
 		}
-		if( ! Site::$action ){
-						header('location: tasker');	
-		}
 		switch( Site::$action ){
 			case 'tasker':
 				$tasker = new Tasker();
@@ -111,8 +108,9 @@ class Site {
 		             'return Site::$lang[$matches[1]];'
 					), $line);
 				$content .= $line;
-			}
-			return preg_replace('/(\n|\r|\t)/', '', $content);
+			}                 
+			# Stripping all new lines, returns and tabs 
+			return $content; //preg_replace('/(\n|\r|\t)/', '', $content);
 		}
 	}
 
