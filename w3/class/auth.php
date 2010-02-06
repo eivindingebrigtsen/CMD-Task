@@ -85,7 +85,7 @@ class Auth{
 		return '{loggedout: '.$_SESSION['loggedin'].'}';
 	}
 	public function displayLogin(){
-		return include('view/admin/login_form.php');
+		return include('view/global/login_form.php');
 	}
 	public function loginJs(){		
 		return <<<JAVASCRIPT
@@ -94,7 +94,7 @@ class Auth{
 			$.post('admin/login', {phrase: $('#phrase').val()}, function(data,status){
 				var js = eval('(' + data + ')');
 				if(js.status === 'success'){
-					 window.location = 'admin/';
+					 window.location = 'tasker/';
 				}
 			});			
 		};
