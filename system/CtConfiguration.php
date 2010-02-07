@@ -101,6 +101,36 @@ class CtConfiguration {
     }
 
     /**
+     * Get section of configuration
+     * @param String $section_name
+     * @return Array|Boolean
+     */
+    public function getSection($section_name) {
+        if(array_key_exists($section_name, $this->configuration)) {
+            return $this->configuration[$section_name];
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Get value for key in a section
+     *
+     * @param String $section_name
+     * @param String $key_name
+     * @return Array|Boolean
+     */
+    public function getValueForKey($section_name, $key_name) {
+        $section = $this->getSection($section_name);
+
+        if(isset($section[$key_name])) {
+            return $section[$key_name];
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Set INI setting for SMTP URL
      *
      * @param String $smtp smtp url
