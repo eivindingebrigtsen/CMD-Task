@@ -12,6 +12,7 @@ require('time.php');
 require('tasker.php');
 require('keywords.php');
 require('lists.php');
+require('rest.php');
 # require('class/events.php');
 
 
