@@ -9,25 +9,48 @@
  */
 class CtConfiguration {
     /**
+     * Holds an instance of this class
+     * @var CtConfiguration
+     */
+    private static $instance;
+
+    /**
      * Path to configuration file
      * @var String
      */
-    protected $ini_file;
+    private $ini_file;
     /**
      * Loaded configuration
      * @var Array
      */
-    protected $configuration;
+    private $configuration;
     /**
      * Currently loaded configuration sections
      * @var Array
      */
-    protected $sections;
+    private $sections;
 
-    public function __construct() {
+    private function __construct() {
         $this->ini_file = __DIR__ . '/../etc/configuration.ini';
         $this->configuration = array();
         $this->sections = array();
+    }
+
+    public static function getInstance() {
+        if(!isset(self::$instance)) {
+            $class = __CLASS__;
+            self::$instance = new $class;
+
+            // Load configuration
+            try {
+                self::$instance->loadConfiguration();
+            } catch (Exception $exception) {
+                self::$instance = null;
+                print_r($exception);
+            }
+        }
+
+        return self::$instance;
     }
 
     /**
@@ -35,7 +58,7 @@ class CtConfiguration {
      *
      * @return Array
      */
-    public function loadConfiguration() {
+    private function loadConfiguration() {
         if(is_file($this->ini_file)) {
             $this->configuration = parse_ini_file($this->ini_file, true);
             $this->sections = array_keys($this->configuration);
@@ -83,8 +106,7 @@ class CtConfiguration {
      * @param String $smtp smtp url
      * @return Boolean status
      */
-    protected function setIniSMTP($smtp) {
-        print "This is smtp: $smtp<br/>";
+    private function setIniSMTP($smtp) {
         if(!empty($smtp)) {
             ini_set('SMTP', $smtp);
             return true;
@@ -100,7 +122,7 @@ class CtConfiguration {
      * @param String $email_sender_addr
      * @return Boolean status
      */
-    protected function setIniSendmailFrom($email_name, $email_sender_addr) {
+    private function setIniSendmailFrom($email_name, $email_sender_addr) {
         if(empty($email_name) == false && empty($email_sender_addr) == false) {
             $string = sprintf("%s <%s>" , $email_name, $email_sender_addr);
             ini_set('sendmail_from', $string);
@@ -117,7 +139,7 @@ class CtConfiguration {
      * @param Integer $code
      * @param Unknown $previous
      */
-    protected function bail($error_message, $code=null, $previous=null) {
+    private function bail($error_message, $code=null, $previous=null) {
         if(!empty($error_message)) {
             throw new Exception($error_message, $code, $previous);
         } else {
