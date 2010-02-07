@@ -48,6 +48,7 @@ class Site {
         self::$section 		= false;		
         self::$subsection 	= false;		
         self::$do 			= false; 
+		FB::info($_REQUEST, 'Request data');
 		FB::info($_SERVER, 'Site construct');
 		self::getOffset();
 		self::display();
@@ -84,6 +85,12 @@ class Site {
 				$tasker = new Tasker();
 				$tasker->offsetGet(Site::$section, Site::$subsection, Site::$do);
 				FB::info($tasker, 'Tasker');
+			break;
+			case 'api': 
+				$request = new RestRequest($_SERVER['REQUEST_URI'], Site::$section);  
+				$request->execute();  
+				echo '<pre>' . print_r($request, true) . '</pre>';
+				
 			break;
 		}
 	}
