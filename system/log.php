@@ -1,8 +1,10 @@
 <?php
 class log {
-  public static $code;
+  public static $code; 
+  private $configuration;
   public function __construct() {
-		self::$code = ANALYTICS_CODE;
+		$this->configuration = $this->loadConfiguration();
+		Site::$vars['code'] = $this->configuration['analytics'];
 		$this->logVisit();
   }     
 	public function logVisit(){
@@ -14,8 +16,17 @@ class log {
 		
 	}
 	public function getAnalytics(){
-		Site::$vars['code'] = self::$code;
+		Site::$vars['code'] = $this->configuration['analytics'];
 		return Site::parseFile('view/global/analytics.html');
+	}
+	private function loadConfiguration() {
+	    $config_obj = Config::getInstance();
+	    $config = $config_obj->getSection('DEFAULTS');
+	    if($config) {
+	        return $config;
+	    } else {
+	        return false;
+	    }
 	}
 }
 ?>

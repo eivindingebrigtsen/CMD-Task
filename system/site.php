@@ -32,26 +32,32 @@ class Site {
 	public static $inlinejs;
 	public static $offset;
 	public static $file;
+	private static $defaults; 
+	public static $debug; 
 	/**
 	 * Construct
 	 * Initiate needed classes
 	 */
 	public function __construct() {
+		$this->defaults 	= $this->loadConfiguration('DEFAULTS');   
+		$this->debug 		= $this->loadConfiguration('DEBUGGING');   
+		$this->title 		= '+Task';
+        $this->action 		= false;
+        $this->section 		= false;		
+        $this->subsection 	= false;		
+        $this->do 			= false; 
+		/*
+		 * References to instances of classes accessible for other classes
+		 */
 		self::$i18n			= new i18n(); 
-		FB::log(self::$lang, 'i18n');
 		self::$db 			= new dBase();
 		self::$auth 		= new Auth();
-		#self::$event		= new EvData();
-		self::$title 		= '+Task';
 		self::$user 		= Auth::$user;
-        self::$action 		= false;
-        self::$section 		= false;		
-        self::$subsection 	= false;		
-        self::$do 			= false; 
-		FB::info($_REQUEST, 'Request data');
-		FB::info($_SERVER, 'Site construct');
-		self::getOffset();
-		self::display();
+
+		$this->getOffset();
+		$this->display();
+		#FB::info($_REQUEST, 'Request data');
+		#FB::info($_SERVER, 'Site construct');
 	}
 	private function getOffset(){
 		// From the url
@@ -94,6 +100,15 @@ class Site {
 			break;
 		}
 	}
+	private function loadConfiguration($section) {
+	    $config_obj = Config::getInstance();
+	    $config = $config_obj->getSection($section);
+	    if($config) {
+	        return $config;
+	    } else {
+	        return false;
+	    }
+	}
 
 	public function parseFile($file){
 		if (file_exists($file)){
@@ -133,16 +148,16 @@ class Site {
 				$userpanel .= '<a href="admin/logout">Logout</a>';
 			}
 
-			if( ANALYTICS_CODE ){
+			if( self::$vars['code'] ){
 				$analytics = Site::$log->getAnalytics();
 			}
-			$base = BASEPATH;
-			$action = Site::$action;
-			$inlinejs = Site::$inlinejs;
-			$title = Site::$title;
-		    $html = Site::$html;
-		    $header = Site::$header;
-		    $footer = Site::$footer;
+			$base = 	self::$defaults['basepath'];
+			$action = 	self::$action;
+			$inlinejs = self::$inlinejs;
+			$title = 	self::$title;
+		    $html = 	self::$html;
+		    $header = 	self::$header;
+		    $footer = 	self::$footer;
 
 			require('view/global/header.php');      
 			echo <<<HTML

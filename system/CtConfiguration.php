@@ -7,10 +7,10 @@
  *
  * @author Roger C.B. Johnsen
  */
-class CtConfiguration {
+class Config {
     /**
      * Holds an instance of this class
-     * @var CtConfiguration
+     * @var Config
      */
     private static $instance;
 
@@ -31,7 +31,7 @@ class CtConfiguration {
     private $sections;
 
     private function __construct() {
-        $this->ini_file = __DIR__ . '/../etc/configuration.ini';
+        $this->ini_file = dirname(__FILE__) . '/../etc/configuration.ini';
         $this->configuration = array();
         $this->sections = array();
     }
@@ -99,8 +99,8 @@ class CtConfiguration {
     public function describeSections() {
         return $this->sections;
     }
-
-    /**
+ 
+     /**
      * Get section of configuration
      * @param String $section_name
      * @return Array|Boolean
