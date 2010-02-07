@@ -5,7 +5,7 @@ ob_start();
  * Bootstraps and includes all necessary files for the application
  * includes: conf.php, debug.php, connect.php
  */
-require('bootstrap.php');
+require('../system/bootstrap.php');
 /*
  * Initiate Site
  */
