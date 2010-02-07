@@ -248,7 +248,7 @@ class Tasker  {
 	}
 	public function getImportInterface(){
 	  Site::$html = Site::parseFile('view/tasker/import.html');  
-	  Site::$inlinejs .= Site::parseFile('../static/javascript/import.js');	
+	  Site::$inlinejs .= Site::parseFile('static/javascript/import.js');	
 	}
 	public function getInterface(){
 		self::$keywords = new Keywords();
@@ -273,7 +273,7 @@ JAVASCRIPT;
 		}
 		Site::$vars['handleshortcuts'] = implode($shortcuts, ' ');
 		Site::$vars['codes'] = implode($codes, ' ');
-		return Site::parseFile('../static/javascript/tasker.js');
+		return Site::parseFile('static/javascript/tasker.js');
 	}
 
 }

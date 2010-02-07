@@ -7,7 +7,7 @@ define('DBTABLE','tasker');
 define('DBUSER','root');
 define('DBPASS','');   
 define('LANG', 'en');
-define('BASEPATH', "http://localhost/a/Projects/CMD-Task/");
+define('BASEPATH', "http://localhost/a/Projects/CMD-Task/w3/");
 define('ANALYTICS_CODE',false);
 define('SEPERATOR', '/');
 define('SEND_MAIL', true);
