@@ -36,7 +36,7 @@
 				if(dates){
 					me.addClass('date_replace');
 					$.ajax({
-					  url: 'tasker/date/'+val.replace('_', ' '),
+					  url: 'tasks/date/'+val.replace('_', ' '),
 					  dataType: 'json',
 					  type: 'POST',
 					  success: function(data,status){
@@ -95,17 +95,17 @@
 				console.log('sending up:', params);
 				$.loading = true;
 				$.ajax({
-				  url: 'tasker/add',
+				  url: 'tasks/add',
 				  dataType: 'json',
 				  type: 'POST',
 				  data: params,
 				  success: function(data,status){
 					$[data.status](data.string);
 					$.loading = false;
-					$('aside').empty().load('tasker/keys', function(){
+					$('aside').empty().load('tasks/keys', function(){
 						$('#search_list').trigger('listUpdate');
 					});
-					$('section.content').empty().load('tasker/tasks');
+					$('section.content').empty().load('tasks/tasks');
 					$('#input').find('li:not(#holder)').hide( 200, 
 						function(){ 
 							$(this).remove();
@@ -177,7 +177,7 @@
 			$('.task-done.done').live('click', function(ev){
 				me = $(this);
 			   	$.ajax({
-				  url: 'tasker/undo',
+				  url: 'tasks/undo',
 				  dataType: 'json',
 				  type: 'POST',
 				  data: {id : me.siblings('input').val()},
@@ -192,7 +192,7 @@
 			$('.task-done.todo').live('click', function(ev){
 				me = $(this);
 			   	$.ajax({
-				  url: 'tasker/do',
+				  url: 'tasks/do',
 				  dataType: 'json',
 				  type: 'POST',
 				  data: {id : me.siblings('input').val()},
@@ -207,7 +207,7 @@
 			$('.task-delete').live('click', function(ev){
 				me = $(this);
 			   	$.ajax({
-				  url: 'tasker/delete',
+				  url: 'tasks/delete',
 				  dataType: 'json',
 				  type: 'POST',
 				  data: {id : me.siblings('input').val()},
@@ -318,7 +318,7 @@
 			}); 
 			$.dateReplace = function(val){
 				  $.ajax({
-					  url: 'tasker/date/'+val,
+					  url: 'tasks/date/'+val,
 					  dataType: 'json',
 					  type: 'POST',
 					  success: function(data,status){

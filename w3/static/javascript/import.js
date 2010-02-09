@@ -1,6 +1,6 @@
                               	$.dateReplace = function(val){
  $.ajax({
-			  url: 'tasker/date/'+val,
+			  url: 'tasks/date/'+val,
 			  dataType: 'json',
 			  type: 'POST',
 			  success: function(data,status){
@@ -16,7 +16,7 @@
 	};
 	$.datesReplace = function(arr){
  $.ajax({
-			  url: 'tasker/dates/',
+			  url: 'tasks/dates/',
 			  data: {
 				"dates": arr
 			  },
@@ -36,13 +36,14 @@
 		
 	};
 	function replaceSyntax(txt){
+		console.log(txt);
 		var datematch = /(mon|tue|wed|thu|fri|sat|sun|sunday|monday|tuesday|wednesday|thursday|friday|saturday|yesterday|tomorrow|today|now|\+[0-9]\sday|\+[0-9]\sweek|\+[0-9]\smonth|\+[0-9]\syear|((31(?! (FEB|APR|JUN|SEP|NOV)))|((30|29)(?! FEB))|(29(?= FEB (((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)))))|(0?[1-9])|1\d|2[0-8]) (JAN|FEB|MAR|MAY|APR|JUL|JUN|AUG|OCT|SEP|NOV|DEC) ((1[6-9]|[2-9]\d)\d{2}))/gi;
 		var dates = txt.match(datematch, function(a,b,c,d){
 			console.log('MATCH: ', a, b, c, d);
 		});
 		if(dates!==null){
 			if(dates.length === 1){						
- $.dateReplace(dates[0]);
+ 				 $.dateReplace(dates[0]);
 				txt = txt.replace(datematch,'<span class="date date_replace">$1</span>');
 			}else{
 			var datearr = [];
@@ -56,7 +57,7 @@
 				console.log(datearr);
 			}
 	   	}
-		txt = txt.replace(/(?:^|\\n)(\*(^\/)|\•|\-)(.*)(^\\n|\\r|\@|\||\#|\/\*|\*\/)/g, function(a,b,c){
+		txt = txt.replace(/(?:^|\n)(\*(^\/)|\•|\-)(.*)(?=^\n|\r|\@|\||\#|\/\*|\*\/)/g, function(a,b,c){
 			console.log('a', a, 'b', b, 'c',c);
 			return '<h3 class="title">'+a+'</h3>';
 		});
@@ -69,8 +70,11 @@
 $('#editable').bind('blur', function(e){
 		e.preventDefault();
 		var me = $('#editable');
+		var he = $('#textarea');
+		var test = he.val();		
 		var txt = me.text();
+		console.log('TEST:', he.val(), test.match(/\n/g).length, '\n', txt, txt.match(/\n/g).length);
 		txt = replaceSyntax(txt);
-		me.html(txt).focus();				
+//		me.html(txt).focus();				
 	});
 $('#editable').focus();

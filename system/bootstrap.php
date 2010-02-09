@@ -1,9 +1,7 @@
 <?php
-require_once('Config.php');
-require('libs/validate_email.php'); 
-
 # Classes 
 require_once('site.php');
+require_once('config.php');
 require_once('i18n.php');
 require_once('auth.php');
 require_once('dbase.php');
@@ -15,13 +13,14 @@ require_once('rest.php');
 require_once('log.php');
 # require('class/events.php');
 
+ 
+#Libs
+require_once('libs/validate_email.php'); 
 
-# Debug
+#Debug
 require_once('libs/FirePHPCore/fb.php');
-FB::setEnabled(Site::$debug['debug']);   
 
 /**
  * Make sure the systemwide configuration is loaded
  */
-Config::getInstance();
 ?>

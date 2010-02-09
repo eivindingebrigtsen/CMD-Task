@@ -693,7 +693,7 @@ fieldset {
 	z-index: 789
 }
 
-.tasker {
+.tasks {
 	font-family: "Espresso Mono",Consolas,LucidaConsole,Monaco,monospace;
 	max-width: 800px
 }
@@ -709,7 +709,7 @@ aside h3 {
 	text-shadow: none
 }
 
-.tasker .content {
+.tasks .content {
 	float: right;
 	clear: none;
 	max-width: 600px

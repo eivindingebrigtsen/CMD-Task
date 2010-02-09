@@ -3,7 +3,7 @@ $.sendPass = function(){
 $.post('admin/login', {phrase: $('#phrase').val()}, function(data,status){
 		var js = eval('(' + data + ')');
 		if(js.status === 'success'){
-			 window.location = 'tasker/';
+			 window.location = 'tasks/';
 		}
 	});			
 };

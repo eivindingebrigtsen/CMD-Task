@@ -18,37 +18,38 @@ class Tasker  {
 	public function offsetGet($offset){
 		switch($offset){
 			case 'add':   
-				Site::$string = self::addItem();
+				Site::$response = self::addItem();
 			break;
+
 			case 'delete':  
-			if(isset($_POST['id'])){
-			 	Site::$string = self::hideItem($_POST['id']);				
-			}
+				if(isset($_POST['id'])){
+			 		Site::$response = self::hideItem($_POST['id']);				
+				}
 			break;
 			case 'undo':  
 				if(isset($_POST['id'])){
-				 	Site::$string = self::setItemUndone($_POST['id']);				
+				 	Site::$response = self::setItemUndone($_POST['id']);				
 				}
 				break;
 			case 'do':  
 				if(isset($_POST['id'])){
-				 	Site::$string = self::setItemDone($_POST['id']);				
+				 	Site::$response = self::setItemDone($_POST['id']);				
 				}
 				break;
 			case 'tasks':  
 		 		$list = new Lists();  
-				Site::$string =  $this->writeLists(); 
+				Site::$response =  $this->writeLists(); 
 
 			break;
 			case 'keys':  
 			 	$keys = new Keywords();
-				Site::$string = $keys->outputAsideGUI();
+				Site::$response = $keys->outputAsideGUI();
 			break; 
 			case 'dates':
-				Site::$string = Time::getDates($_POST['dates']);
+				Site::$response = Time::getDates($_POST['dates']);
 			break;
 			case 'date':
-				Site::$string = Time::getDateFromString(Site::$subsection);
+				Site::$response = Time::getDateFromString(Site::$subsection);
 			break;
 			case 'view':  
 			 	self::getItem(Site::$subsection);
@@ -63,6 +64,10 @@ class Tasker  {
 				self::setupDB();
 			break;
 			default:
+				FB::error($offset, 'OFFSET NOT KNOWN');				
+				self::$keywords = new Keywords();
+				self::$keywords->checkOffset($offset);
+				self::$lists = new Lists();				
 				self::getInterface();			
 			break;
 		}
@@ -91,7 +96,9 @@ class Tasker  {
 				$keys = $_POST['keys'];
 			}
 		}
-		if(!$nada){
+		FB::info($nada, 'Nothing here?');
+		if(!$nada){ 
+			FB::info($raw, 'adding');
 			$sql = "INSERT INTO  `tasks` (`id` , `text` , `raw_string` , `desc` , `date` , `date_created` , `date_updated`) 
 					VALUES (NULL ,  '". $text ."', '". $raw ."',  '". $desc ."',  ".$date.",  ". time().",  ". time() .");";
 			$result = Site::$db->query($sql);
@@ -100,7 +107,6 @@ class Tasker  {
 			$list = 1;
 			self::addTaskUserRelation($task, $user);
 			Lists::addListTaskRelation($list, $task);
-			FB::error($keys, 'Keys');
 			if($keys){
 				foreach($keys as $key => $name){
 					$type = Keywords::getTypeID($name[0]);
@@ -184,7 +190,7 @@ class Tasker  {
 		$markup = array();
 		$markup[] = '<ul id="tasks">';
 		foreach(Lists::$lists as $list){
-			FB::log($list,'List');
+			#FB::log($list,'List');
 			$markup[] = '<li><h2>'. $list['list']->name. '</h2>';
 			$markup[] = '<ul id="'. $list['list']->name. '">';
 			foreach($list['tasks'] as $task){
@@ -247,15 +253,13 @@ class Tasker  {
 		return implode($markup, '');
 	}
 	public function getImportInterface(){
-	  Site::$html = Site::parseFile('view/tasker/import.html');  
+	  Site::$page = Site::parseFile('view/tasker/import.html');  
 	  Site::$inlinejs .= Site::parseFile('static/javascript/import.js');	
 	}
 	public function getInterface(){
-		self::$keywords = new Keywords();
-		self::$lists = new Lists();
 		Site::$vars['aside']  = $this->getAside();
 		Site::$vars['items']  = $this->writeLists();
-		Site::$html = Site::parseFile('view/tasker/dashboard.html');
+		Site::$page = Site::parseFile('view/tasker/dashboard.html');
 		Site::$inlinejs .= self::getInputJs();
 	}
 	public function getInputJs(){ 

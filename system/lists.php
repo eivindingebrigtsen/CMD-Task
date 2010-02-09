@@ -18,7 +18,7 @@ class Lists {
 					self::$lists[$list->id]['list'] = $list;
 					self::$lists[$list->id]['tasks'] = $this->getTasks($list->id);					
 			}
-			FB::info(self::$lists,'SELF List');
+			//FB::info(self::$lists,'SELF List');
 		}
 	}
 	public function getTasks($list){

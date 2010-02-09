@@ -34,11 +34,11 @@ class Auth{
 	public function handleAuth(){
 		switch(Site::$section){
 			case 'login': 
-			   	Site::$string = Site::$auth->authenticatePhrase();
+			   	Site::$response = Site::$auth->authenticatePhrase();
 				break;
 			default: 
 		   		Site::$inlinejs = Site::$auth->loginJs();
-	    		Site::$html = Site::$auth->displayLogin();		
+	    		Site::$page = Site::$auth->displayLogin();		
 			break;
 		}			 		
 	}
@@ -63,7 +63,7 @@ class Auth{
 		$status = 'warning';
 		$phrase = $_POST['phrase'];  
 		FB::log($phrase, 'Logging in with');
-		if($phrase == KEYPHRASE){
+		if($phrase == Site::$defaults['keyphrase']){
 			$status = 'success';
 			FB::log($phrase, 'Logged in');
 			$_SESSION['loggedin'] = true;

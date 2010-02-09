@@ -26,21 +26,19 @@ class Site {
 	public static $lang;
 	public static $header; 
 	public static $footer;
-	public static $string;
-	public static $html;
+	public static $response;
+	public static $page;
 	public static $vars;
 	public static $inlinejs;
 	public static $offset;
 	public static $file;
-	private static $defaults; 
+	public static $defaults; 
 	public static $debug; 
 	/**
 	 * Construct
 	 * Initiate needed classes
 	 */
 	public function __construct() {
-		$this->defaults 	= $this->loadConfiguration('DEFAULTS');   
-		$this->debug 		= $this->loadConfiguration('DEBUGGING');   
 		$this->title 		= '+Task';
         $this->action 		= false;
         $this->section 		= false;		
@@ -52,12 +50,22 @@ class Site {
 		self::$i18n			= new i18n(); 
 		self::$db 			= new dBase();
 		self::$auth 		= new Auth();
+		$config 			= Config::getInstance();
+		self::$defaults 	= $config->getSection('DEFAULTS');   
+		self::$debug 		= $config->getSection('DEBUG');   
 		self::$user 		= Auth::$user;
 
 		$this->getOffset();
-		$this->display();
+		$this->display();		
+		$this->getDebug();
+		
 		#FB::info($_REQUEST, 'Request data');
 		#FB::info($_SERVER, 'Site construct');
+	}
+	private function getDebug(){
+		FB::setEnabled(Site::$debug['debug']);   
+		Site::$db->getDebug();
+		FB::log($_SERVER, 'SERVER');		
 	}
 	private function getOffset(){
 		// From the url
@@ -83,14 +91,14 @@ class Site {
 	}
 	private function offsetGet(){
 		if( ! Auth::$authenticated ){
-				Auth::handleAuth();
-			return;
-		}
+		 		Auth::handleAuth();
+		 	return;
+	    }
 		switch( Site::$action ){
-			case 'tasker':
+			case 'tasks':
 				$tasker = new Tasker();
 				$tasker->offsetGet(Site::$section, Site::$subsection, Site::$do);
-				FB::info($tasker, 'Tasker');
+				//FB::info($tasker, 'Tasker');
 			break;
 			case 'api': 
 				$request = new RestRequest($_SERVER['REQUEST_URI'], Site::$section);  
@@ -100,16 +108,6 @@ class Site {
 			break;
 		}
 	}
-	private function loadConfiguration($section) {
-	    $config_obj = Config::getInstance();
-	    $config = $config_obj->getSection($section);
-	    if($config) {
-	        return $config;
-	    } else {
-	        return false;
-	    }
-	}
-
 	public function parseFile($file){
 		if (file_exists($file)){
 		   	$arr = file($file);
@@ -138,7 +136,7 @@ class Site {
 
  	private function display(){
 		self::offsetGet();
-		if( isset(Site::$html) ){  
+		if( isset(Site::$page) ){  
 			$analytics = '';
 			$userpanel = '';
 			if( empty(Site::$inlinejs) ){
@@ -155,7 +153,7 @@ class Site {
 			$action = 	self::$action;
 			$inlinejs = self::$inlinejs;
 			$title = 	self::$title;
-		    $html = 	self::$html;
+		    $html = 	self::$page;
 		    $header = 	self::$header;
 		    $footer = 	self::$footer;
 
@@ -168,8 +166,8 @@ class Site {
 HTML;
 			require('view/global/footer.php');
 
-		} else if ( isset( Site::$string ) ){
-				echo Site::$string;
+		} else if ( isset( Site::$response ) ){
+				echo Site::$response;
 		}
 	
 	}

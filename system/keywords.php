@@ -5,6 +5,36 @@ class Keywords {
 	public function __construct() {
 		self::getUserKeywords();
   	}
+	public function checkOffset($offset){
+		if($offset){
+			$keys = self::getKeyCodes();
+			$exp = '[';
+			foreach($keys as $id => $code){
+				$exp .= '\\'.$code;
+			}
+			$exp .= ']';
+			preg_match('/^('.$exp.')(.*?)$/', $offset, $matches);
+			if(count($matches)){
+				$exists = array_search($matches[1], $keys);
+				if($exists !== false){
+					FB::info($exists, 'Exists');
+					FB::info($keys, 'KEY');
+				}				
+			}else{
+				if($this->key_exist($offset, "'/'")){
+					FB::info($offset, 'We have a list');
+				}else{
+					FB::error($offset, 'We don\'t know this');
+				}
+			}
+			
+		}else{
+			/**
+			 *  @todo add javascript handling of location.hash 			
+			**/			                                       
+			FB::error('@todo location.hash js');
+		}
+	}
 	public function getUserKeywords(){
 		//FB::info(Site::$user, 'User');
 		if(Site::$user){
@@ -43,15 +73,23 @@ class Keywords {
 		}                
 		return $keywords;
 	}
+	private function key_exist($keyword, $type){
+	    $sql = "SELECT `keywords`.`keyword`, `keywords`.`id`, `keywords`.`type`
+				FROM `keywords`
+				INNER JOIN `keytypes`
+				ON `keytypes`.`id` = `keywords`.`type`
+				WHERE `keywords`.`keyword` = '".$keyword."'";
+		
+		if(is_int($type)){
+			$sql .= " AND `keytypes`.`id` = ".$type.";";
+		}else{
+			$sql .= " AND `keytypes`.`code` = ".$type.";";
+		}
+		$result = Site::$db->query($sql);
+		return $result->num_rows;
+	}
 	public function add_if_not_exists($keyword, $type){	   
-		    $sql = "SELECT `keywords`.`keyword`, `keywords`.`id`, `keywords`.`type`
-					FROM `keywords`
-					INNER JOIN `keytypes`
-					ON `keytypes`.`id` = `keywords`.`type`
-					WHERE `keywords`.`keyword` = '".$keyword."' 
-					AND `keytypes`.`id` = ".$type.";";
-			$result = Site::$db->query($sql);
-			if($result->num_rows > 0){
+			if(self::key_exist($keyword, $type)){
 				$key = $result->fetch_assoc();
 				FB::log($keyword, 'WE have it');
 				FB::log($type, 'WE have it');
@@ -77,6 +115,15 @@ class Keywords {
 		return $types;
 	}   
 
+	private function getKeyCodes(){
+		$sql = "SELECT * FROM `keytypes`;";
+		$result = Site::$db->query($sql);
+		$codes = array();
+		while($obj = $result->fetch_assoc()){				   
+			$codes[$obj['id']] = $obj['code'];
+		}
+		return $codes;
+	}   
 	public function getTypeID($type){
 		$sql = "SELECT `keytypes`.`type`, `keytypes`.`id`
 				FROM `keytypes` 
