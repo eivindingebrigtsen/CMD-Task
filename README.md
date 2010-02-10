@@ -12,31 +12,31 @@ Syntax:
 
 Dependencies:
 -------------------------
--Oauth 			=> Authentification
--PHP 5.2			=> Serverside
--MySQL				=> Database (will be ported to more at a later stage)
--Scaffold css	=> for easier css writing and skinning 
--jQuery		 	=> javascript framework
--FirePHP			=> output and debugging
+- Oauth 		  		=> Authentification
+- PHP 5.2			=> Serverside
+- MySQL				=> Database (will be ported to more at a later stage)
+- Scaffold css		=> for easier css writing and skinning 
+- jQuery		 		=> javascript framework
+- FirePHP			=> output and debugging
 
 
 Installing:
 ------------------------
--Configuration of the system in /etc/configuration.ini  
--SQL for the database is in /etc/db.sql
--Go to your http://path/to/cmd-task/tasks
--Secret is abc 
+- Configuration of the system in /etc/configuration.ini  
+- SQL for the database is in /etc/db.sql
+- Go to your http://path/to/cmd-task/tasks
+- Secret is abc 
 
 
 Online Site index:
 ------------------------
--http://server/login 
--http://server/tasks 
--http://server/tasks/list 		<= gets all items for that list
--http://server/tasks/|@context <= gets all tasks for that context
--http://server/tasks/|project  <= gets all tasks for that project
--http://server/tasks/_time		<= gets all tasks for that day
--http://server/tasks/#topic  	<= gets all items for that topic
+- http://server/login 
+- http://server/tasks 
+- http://server/tasks/list 		<= gets all items for that list
+- http://server/tasks/|@context <= gets all tasks for that context
+- http://server/tasks/|project  <= gets all tasks for that project
+- http://server/tasks/_time		<= gets all tasks for that day
+- http://server/tasks/#topic  	<= gets all items for that topic
 
 
 Planned Features:
