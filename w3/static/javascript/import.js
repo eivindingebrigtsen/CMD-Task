@@ -67,14 +67,23 @@
 		txt = txt.replace(/\/\*[\d\D]*?\*\//g,'<p class="task-desc">$&</p>'); 
 		return txt;
 	};
-$('#editable').bind('blur', function(e){
+$('#textarea').bind('blur', function(e){
 		e.preventDefault();
-		var me = $('#editable');
-		var he = $('#textarea');
-		var test = he.val();		
-		var txt = me.text();
-		console.log('TEST:', he.val(), test.match(/\n/g).length, '\n', txt, txt.match(/\n/g).length);
-		txt = replaceSyntax(txt);
+		var he = $(this);
+		var txt = he.text();
+	 $.ajax({
+				  url: 'tasks/interpret/',
+				  data: {
+					"raw": txt
+				  },
+				  dataType: 'json',
+				  type: 'POST',
+				  success: function(data,status){
+					console.log(data,status)
+				}});
+
+
+//		txt = replaceSyntax(txt);
 //		me.html(txt).focus();				
 	});
 $('#editable').focus();

@@ -9,7 +9,6 @@ require('../system/bootstrap.php');
 /*
  * Initiate Site
  */
- 	
 $site = new Site();		
 ob_end_flush();
 ?>

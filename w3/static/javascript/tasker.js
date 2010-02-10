@@ -1,3 +1,4 @@
+
 		$(function(){
 			$(document).data('codes', []);
 			{$codes}
@@ -313,8 +314,8 @@
 			});
 			$('#insert').focus();
 			$('.task-keywords li, aside li').live('click',function(ev){
-				$('#tasks > li > ul').find('li:not(.task-keywords li)').hide();
-				$('#tasks > li > ul').find('li.'+$(this).attr('rel')).show().parents('li').show();
+				window.location.href= '/CMD-Task/tasks/'+$(this).text();
+
 			}); 
 			$.dateReplace = function(val){
 				  $.ajax({

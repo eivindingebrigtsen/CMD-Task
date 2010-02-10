@@ -39,35 +39,32 @@ class Site {
 	 * Initiate needed classes
 	 */
 	public function __construct() {
-		$this->title 		= '+Task';
-        $this->action 		= false;
-        $this->section 		= false;		
-        $this->subsection 	= false;		
-        $this->do 			= false; 
+		self::$title 		= '+Task';
+        self::$action 		= false;
+        self::$section 		= false;		
+        self::$subsection 	= false;		
+        self::$do 			= false; 
 		/*
 		 * References to instances of classes accessible for other classes
 		 */
 		self::$i18n			= new i18n(); 
 		self::$db 			= new dBase();
 		self::$auth 		= new Auth();
+		
+		self::$user 		= Auth::$user;
+		
 		$config 			= Config::getInstance();
 		self::$defaults 	= $config->getSection('DEFAULTS');   
 		self::$debug 		= $config->getSection('DEBUG');   
-		self::$user 		= Auth::$user;
 
-		$this->getOffset();
-		$this->display();		
-		$this->getDebug();
+		self::getOffsetArray();
+		self::display();		
+		self::getDebug();
 		
 		#FB::info($_REQUEST, 'Request data');
 		#FB::info($_SERVER, 'Site construct');
 	}
-	private function getDebug(){
-		FB::setEnabled(Site::$debug['debug']);   
-		Site::$db->getDebug();
-		FB::log($_SERVER, 'SERVER');		
-	}
-	private function getOffset(){
+	private function getOffsetArray(){
 		// From the url
 		if(isset($_GET['action'])){
 			self::$action = strtolower($_GET['action']);
@@ -87,7 +84,6 @@ class Site {
 		}
 		self::$log = new log();
 		FB::log(self::$offset, 'Offset');
-		
 	}
 	private function offsetGet(){
 		if( ! Auth::$authenticated ){
@@ -107,7 +103,11 @@ class Site {
 				
 			break;
 		}
-	}
+	}                                
+	/**
+	 *  @return File parsed with variables and strings replaced
+	**/
+	
 	public function parseFile($file){
 		if (file_exists($file)){
 		   	$arr = file($file);
@@ -136,6 +136,10 @@ class Site {
 
  	private function display(){
 		self::offsetGet();
+		/**
+		 *  @todo rewrite display function
+		**/
+		
 		if( isset(Site::$page) ){  
 			$analytics = '';
 			$userpanel = '';
@@ -153,9 +157,9 @@ class Site {
 			$action = 	self::$action;
 			$inlinejs = self::$inlinejs;
 			$title = 	self::$title;
-		    $html = 	self::$page;
-		    $header = 	self::$header;
-		    $footer = 	self::$footer;
+			$html = 	self::$page;
+			$header = 	self::$header;
+			$footer = 	self::$footer;
 
 			require('view/global/header.php');      
 			echo <<<HTML
@@ -168,8 +172,15 @@ HTML;
 
 		} else if ( isset( Site::$response ) ){
 				echo Site::$response;
+		} else {
+			echo 'no output';
 		}
 	
+	}
+	private function getDebug(){
+		FB::setEnabled(self::$debug['debug']);   
+		self::$db->getDebug();
+		FB::log($_SERVER, 'SERVER');		
 	}
 }
 ?>
