@@ -7,8 +7,7 @@ class Time {
 	const MONTH = 2592000; // 60 * 60 * 24 * 30
 	const YEAR = 31536000; // 60 * 60 * 24 * 365
   	public function __construct() {
-
-  	}
+   	}
 	public function getDates($dates){
 		if(is_array($dates)){
 			$arr = '[';
@@ -79,7 +78,10 @@ class Time {
 		}
 		return $due;		
 	}
-	public function timeSince($date) {
+	public function timeSince($date) {  
+		if(function_exists("date_default_timezone_set") and function_exists("date_default_timezone_get"))
+		@date_default_timezone_set(@date_default_timezone_get());
+
 	    $since = abs(strtotime('now') - $date);
 
 	    if($since > self::YEAR) {

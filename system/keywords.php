@@ -6,7 +6,7 @@ class Keywords {
 		self::getUserKeywords();
   	}
 	public function getUserKeywords(){
-		//FB::info(Site::$user, 'User');
+		//#FB::info(Site::$user, 'User');
 		if(Site::$user){
 			$sql = "SELECT `keywords`.`keyword`, `keywords`.`id`, `keytypes`.`type`,`keytypes`.`code`,`key_relations`.`task`
 					FROM `keywords` 
@@ -24,7 +24,7 @@ class Keywords {
 						self::$keys[ $obj['type'] ][] = $obj;				
 					}
 				}
-			//FB::info(self::$keys,'User Keywords');
+			//#FB::info(self::$keys,'User Keywords');
 		}
 	}
 	public function getKeywordsForTask($task){
@@ -56,7 +56,7 @@ class Keywords {
 			$sql .= " AND `keytypes`.`code` = ".$type.";";
 		}
 		$result = Site::$db->query($sql);
-		FB::log($result->num_rows, 'keyExists SQL');
+		#FB::log($result->num_rows, 'keyExists SQL');
 		if($result->num_rows){			
 			return $result->fetch_assoc();
 		}else{
@@ -67,8 +67,8 @@ class Keywords {
 	public function addKey($keyword, $type){	   
 			$key = self::keyExists($keyword, $type);
 			if($key){
-				FB::log($keyword, 'WE have it');
-				FB::log($type, 'WE have it');
+				#FB::log($keyword, 'WE have it');
+				#FB::log($type, 'WE have it');
 				return $key['id'];
 			}else{
 				return self::writeKey($keyword, $type);
@@ -138,7 +138,7 @@ class Keywords {
 	public function getTypesInfo(){
 		$markup = '';
 		if(self::$keys){
-			FB::warn(self::$keys, 'Keywords::$keys');
+			#FB::warn(self::$keys, 'Keywords::$keys');
   	  	foreach(self::$keys as $key => $type){
 				$markup[] = ''. $key. '';			
 			}
@@ -164,7 +164,7 @@ JAVASCRIPT;
 				}
 				$arr = '['.implode($items,',').']';
 				Site::$inlinejs .= '$(document).data("'.$key.'", '.$arr.');';
-				FB::warn($key, $arr);
+				#FB::warn($key, $arr);
 				$markup[] = '</ul>';			
 			}
 		return implode($markup, '');

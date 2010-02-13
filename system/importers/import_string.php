@@ -2,7 +2,7 @@
 /**
 * String Import
 */
-class StringImport extends Import
+class StringImport extends ImportThingy
 {
 	private static $regtask 		= '/(\*(^\/)|•|-)(.*)(?=\n|\r|\@|\||\#|\/\*|\*\/)/';
 	private static $regcontext 		= '/\@(\w{1,64})/';
@@ -25,7 +25,7 @@ class StringImport extends Import
 		$matches['tags']		= $this->getMatches($string, self::$regtag);
 		
 		
-		FB::log($matches, 'Interpret Tasks');
+		#FB::log($matches, 'Interpret Tasks');
 	}
 	public function getMatches($string, $reg){
 		preg_match_all($reg, $string, $matches);

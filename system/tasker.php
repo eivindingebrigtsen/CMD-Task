@@ -67,7 +67,7 @@ class Tasker  {
 				self::setupDB();
 			break;
 			default:   
-				FB::error($offset, 'OFFSET NOT KNOWN');				
+				#FB::error($offset, 'OFFSET NOT KNOWN');				
 				self::$keywords = new Keywords();				
 				$list = new Lists();				
 				self::$lists = $list->offsetGet($offset);
@@ -79,10 +79,10 @@ class Tasker  {
     	public function writeLists(){  	
 			$markup = array();
 			$markup[] = '<ul id="tasks">';
-			FB::info(Lists::$lists, 'LISTS');
+			#FB::info(Lists::$lists, 'LISTS');
 			if(Lists::$lists){
 				foreach(Lists::$lists as $list){
-					FB::log($list,'List');
+					#FB::log($list,'List');
 					$markup[] = '<li><h2>'. $list['list']['name']. '</h2>';
 					$markup[] = '<ul id="'. $list['list']['name']. '">';
 					foreach($list['tasks'] as $task){
@@ -129,21 +129,20 @@ class Tasker  {
 	  Site::$page = Site::parseFile('view/tasker/import.html');  
 	  Site::$inlinejs .= Site::parseFile('static/javascript/import.js');	
 	}
-	public function getInterface(){	 
-   		
+	public function getInterface(){	    		
 		Site::$title 			= 'cmdtask/'.Site::$section. '';
 		Site::$vars['section'] 	= ''.Site::$section. '';
 		Site::$vars['aside']  	= self::getAside();
 		Site::$vars['items']  	= self::writeLists();
-		Site::$header 	= Site::parseFile('view/tasker/top.html');
-		Site::$page 	= Site::parseFile('view/tasker/dashboard.html');
-		Site::$footer 	= Site::parseFile('view/tasker/bot.html');
-		Site::$inlinejs .= self::getInputJs();
+		Site::$header 			= Site::parseFile('view/tasker/top.html');
+		Site::$page 			= Site::parseFile('view/tasker/dashboard.html');
+		Site::$footer 			= Site::parseFile('view/tasker/bot.html');
+		Site::$inlinejs 		.= self::getInputJs();
 	}
 	public function interpret ($string){
 		$import = new StringImport();
 		$text = $import->interpret($string);
-		FB::error($text);
+		#FB::error($text);
 		return $text;
 	}
 	

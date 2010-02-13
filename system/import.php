@@ -2,7 +2,7 @@
 /**
 * Importer
 */
-class Import 
+class ImportThingy
 {
 	
 	function __construct($string)

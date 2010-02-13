@@ -2,7 +2,7 @@
 class Lists {
 	public static $lists;	
 	public static $helper; 
-	public function __construct() {
+	public function __construct() {		
   	} 
 	public function offsetGet($offset){
 		$helper = new ListsHelper();  		
@@ -19,7 +19,7 @@ class Lists {
 				if($exists !== false){
 					if($matches[2]){
 						$helper->getTasksByKeyword($matches[2], $exists);
-						FB::info($helper, 'Tasks for Keyword');						
+						#FB::info($helper, 'Tasks for Keyword');						
 					}else{
 						$helper->getKeynamesByKeyType($exists);
 					}
@@ -30,18 +30,18 @@ class Lists {
 					 *  Handling directory as a list
 					**/
 					$type = array_search('/', $keys);
-					FB::log($type, 'TYPE');
+					#FB::log($type, 'TYPE');
 					$helper->getTasksByKeyword($offset, $type);
-					FB::info(self::$lists, 'Tasks for Keyword 2');
+					#FB::info(self::$lists, 'Tasks for Keyword 2');
 				}else{
-					FB::error($offset, 'We don\'t know this');
+					#FB::error($offset, 'We don\'t know this');
 				}
 			}			
 		}else{
 			/**
 			 *  @todo add javascript handling of location.hash 			
 			**/			                                       
-			FB::error('@todo location.hash js');
+			#FB::error('@todo location.hash js');
 			$helper->getLists();
 		}
 		self::$lists = $helper->lists;
@@ -52,7 +52,7 @@ class Lists {
 		$markup[] = '<h3>Lists</h3>';			
 		$markup[] = '<ul id="lists" class="lists">';			
 		foreach(self::$lists as $list){
-			//FB::log($list, 'ListItem');
+			//#FB::log($list, 'ListItem');
 			$markup[] = '<li id="list_'.$list['list']->id. '" class="lists">'.$list['list']->name.'</li>';
 		}
 		$markup[] = '</ul>';			

@@ -1,7 +1,8 @@
 <?php
 class user {
 	public static $username;
-	public static $authenticated = Síte::$authenticated;
+	//public static $authenticated = Síte::$authenticated;
+
   public function __construct() {
 		
   }

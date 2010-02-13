@@ -8,7 +8,7 @@ class ListsHelper extends Lists
 	{
 	}
 	public function getLists(){
-		//FB::info(Site::$user, 'User');
+		//#FB::info(Site::$user, 'User');
 		if(Site::$user){			
 			parent::$lists = array();
 			$sql = "SELECT `lists`.`id`, `lists`.`name`
@@ -21,13 +21,13 @@ class ListsHelper extends Lists
 					parent::$lists[$list['id']]['list'] = $list;
 					parent::$lists[$list['id']]['tasks'] = self::getTasks($list['id']);					
 			}
-			//FB::info(self::$lists,'SELF List');
+			//#FB::info(self::$lists,'SELF List');
 		}
 	}
 	public function getTasksByKeyword($keyword, $type){
 		$tasks = array();
 		$keyid = Keywords::getKeyID($keyword, $type);			
-		FB::info('Type '.$type.' Keyword '.$keyword.' Keyid '.$keyid, 'getTasksByKeyword');
+		#FB::info('Type '.$type.' Keyword '.$keyword.' Keyid '.$keyid, 'getTasksByKeyword');
 		$sql = "SELECT `tasks`.`id`, `tasks`.`text`, `tasks`.`raw_string`, `tasks`.`desc`, `tasks`.`date`, `tasks`.`done`,`tasks`.`date_created`,`tasks`.`date_updated`, `tasks`.`priority`,`tasks`.`hidden`,`tasks`.`replyto`
 				FROM `key_relations` 
 				INNER JOIN `tasks`
@@ -35,11 +35,11 @@ class ListsHelper extends Lists
 				WHERE `key_relations`.`keyword` = ". $keyid ." AND `key_relations`.`user` = ".Site::$user."
 				ORDER BY `key_relations`.`id` DESC;";				
 		$result = Site::$db->query($sql);
-		FB::error($result->num_rows, 'SQL');
+		#FB::error($result->num_rows, 'SQL');
 		if($result->num_rows > 0){
 			while($task = $result->fetch_object()){				   				
 				$item = TaskerHelper::getTaskArray($task);         
-				FB::info($item, 'ListsHelper');
+				#FB::info($item, 'ListsHelper');
 				$tasks[]= $item;
 			}
 		}		
@@ -48,7 +48,7 @@ class ListsHelper extends Lists
 	}
 	public function getKeynamesByKeyType($type){
 		$tasks = array();
-		FB::info('Type '.$type ,'getKeynamesByKeyType');
+		#FB::info('Type '.$type ,'getKeynamesByKeyType');
 		$sql = "SELECT `keywords`.`id`, `keywords`.`keyword`, 
 					   `keywords`.`type`, `keytypes`.`type`,
 					   `keytypes`.`code`
@@ -62,9 +62,9 @@ class ListsHelper extends Lists
 		$result = Site::$db->query($sql);
 		if($result->num_rows > 0){
 			while($task = $result->fetch_object()){				   				
-				FB::error($task, 'SQL');
+				#FB::error($task, 'SQL');
 				$item = TaskerHelper::getTaskArray($task);         
-				FB::info($item, 'ListsHelper');
+				#FB::info($item, 'ListsHelper');
 				$tasks[]= $item;
 			}
 		}		

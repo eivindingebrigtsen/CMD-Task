@@ -54,7 +54,7 @@ class dBase extends mysqli {
 	/**
 	 * Gets the executed SQL's and their times
 	 * @see DEBUG must be true in config
-	 * @return   FB::table();
+	 * @return   #FB::table();
 	 */
 	public function getDebug(){
 	    $table = array();
@@ -71,7 +71,7 @@ class dBase extends mysqli {
 
 	    // Output
 	    $title = $count.' SQL Executed in '. self::$totalQueryTime .' sec';
-	    FB::table($title, $table);
+	    #FB::table($title, $table);
 	}
 
 	/**
@@ -97,8 +97,8 @@ class dBase extends mysqli {
 	        // Notice that for each query we record the query string itself and the time it took to execute
 	        self::$queries[] = array ( $query, $execTime );
 	    } else {
-	        FB::error ( $query, 'Error in Query: ' . mysqli_error ( $this ) );
-	        FB::trace ( 'Stack Trace' );
+	        #FB::error ( $query, 'Error in Query: ' . mysqli_error ( $this ) );
+	        #FB::trace ( 'Stack Trace' );
 	    }
     
 	    return $result;

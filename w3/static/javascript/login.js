@@ -1,4 +1,3 @@
-$.textLabels();
 $.sendPass = function(){
 $.post('admin/login', {phrase: $('#phrase').val()}, function(data,status){
 		var js = eval('(' + data + ')');
@@ -10,7 +9,7 @@ $.post('admin/login', {phrase: $('#phrase').val()}, function(data,status){
 $('#phrase').keyup(function(e){
 	clearTimeout($(document).data('timout'));
 	$(document).data('timout', setTimeout(function(){
-		$.sendPass();
+	    $.sendPass();
 	}, 300));
 	if(e.keyCode===13){
 		$.sendPass();

@@ -24,8 +24,8 @@ class Site {
 	public static $url;
 	public static $title;
 	public static $lang;
-	public static $header; 
-	public static $footer;
+	public static $header = ''; 
+	public static $footer = '';
 	public static $response;
 	public static $page;
 	public static $vars;
@@ -56,13 +56,13 @@ class Site {
 		$config 			= Config::getInstance();
 		self::$defaults 	= $config->getSection('DEFAULTS');   
 		self::$debug 		= $config->getSection('DEBUG');   
-
 		self::getOffsetArray();
 		self::display();		
 		self::getDebug();
-		
-		#FB::info($_REQUEST, 'Request data');
-		#FB::info($_SERVER, 'Site construct');
+		self::$log = new log();   
+
+		##FB::info($_REQUEST, 'Request data');
+		##FB::info($_SERVER, 'Site construct');
 	}
 	private function getOffsetArray(){
 		// From the url
@@ -82,8 +82,7 @@ class Site {
 			self::$do = strtolower($_GET['do']);
 			self::$offset['do'] = self::$do;
 		}
-		self::$log = new log();
-		FB::log(self::$offset, 'Offset');
+		#FB::log(self::$offset, 'Offset');
 	}
 	private function offsetGet(){
 		if( ! Auth::$authenticated ){
@@ -94,7 +93,7 @@ class Site {
 			case 'tasks':
 				$tasker = new Tasker();
 				$tasker->offsetGet(Site::$section, Site::$subsection, Site::$do);
-				//FB::info($tasker, 'Tasker');
+				//#FB::info($tasker, 'Tasker');
 			break;
 			case 'api': 
 				$request = new RestRequest($_SERVER['REQUEST_URI'], Site::$section);  
@@ -130,7 +129,7 @@ class Site {
 				$content .= $line;
 			}                 
 			# Stripping all new lines, returns and tabs 
-			return $content; //preg_replace('/(\n|\r|\t)/', '', $content);
+			return preg_replace('/(\n|\r|\t)/', '', $content);
 		}
 	}
 
@@ -141,46 +140,47 @@ class Site {
 		**/
 		
 		if( isset(Site::$page) ){  
-			$analytics = '';
-			$userpanel = '';
+			self::$vars['analytics'] = '';
+			self::$vars['userpanel'] = '';
 			if( empty(Site::$inlinejs) ){
 				Site::$inlinejs = '';
 			}
 			if( Auth::$authenticated ){
-				$userpanel .= '<a href="admin/logout">Logout</a>';
+				self::$vars['userpanel'] .= '<a href="admin/logout">Logout</a>';
 			}
 
-			if( self::$vars['code'] ){
-				$analytics = Site::$log->getAnalytics();
+			if( self::$defaults['analytics'] ){
+				self::$vars['analytics'] = Site::$log->getAnalytics();
 			}
-			$base = 	self::$defaults['basepath'];
-			$action = 	self::$action;
-			$inlinejs = self::$inlinejs;
-			$title = 	self::$title;
-			$html = 	self::$page;
-			$header = 	self::$header;
-			$footer = 	self::$footer;
+			self::$vars['base'] 	= self::$defaults['basepath'];
+			self::$vars['action'] 	= self::$action;
+			self::$vars['inlinejs'] = self::$inlinejs;
+			self::$vars['title'] 	= self::$title;
+			self::$vars['header'] 	= self::$header;
+			self::$vars['footer'] 	= self::$footer;
 
-			require('view/global/header.php');      
+			$html = self::$page;
+			$head = self::parseFile('view/global/header.html');      
+			$foot = self::parseFile('view/global/footer.html');
 			echo <<<HTML
-						
-			<section class="container {$action}"> 
+			{$head}
+			<section class="container"> 
 				{$html}
 			</section>		
+			{$foot}
 HTML;
-			require('view/global/footer.php');
 
-		} else if ( isset( Site::$response ) ){
-				echo Site::$response;
+		} else if ( isset( self::$response ) ){
+				echo self::$response;
 		} else {
 			echo 'no output';
 		}
 	
 	}
 	private function getDebug(){
-		FB::setEnabled(self::$debug['debug']);   
+		#FB::setEnabled(self::$debug['debug']);   
 		self::$db->getDebug();
-		FB::log($_SERVER, 'SERVER');		
+		#FB::log($_SERVER, 'SERVER');		
 	}
 }
 ?>

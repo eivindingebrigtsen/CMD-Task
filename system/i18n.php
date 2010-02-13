@@ -1,4 +1,6 @@
 <?php
+require_once('../system/config.php');
+
 class i18n {
   /**
    * Configuration storage

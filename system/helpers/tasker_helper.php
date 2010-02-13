@@ -26,9 +26,9 @@ class TaskerHelper extends Tasker {
 				$keys = $_POST['keys'];
 			}
 		}
-		FB::info($nada, 'Nothing here?');
+		#FB::info($nada, 'Nothing here?');
 		if(!$nada){ 
-			FB::info($raw, 'adding');
+			#FB::info($raw, 'adding');
 			$sql = "INSERT INTO  `tasks` (`id` , `text` , `raw_string` , `desc` , `date` , `date_created` , `date_updated`) 
 					VALUES (NULL ,  '". $text ."', '". $raw ."',  '". $desc ."',  ".$date.",  ". time().",  ". time() .");";
 			$result = Site::$db->query($sql);
@@ -42,7 +42,7 @@ class TaskerHelper extends Tasker {
 					$type = Keywords::getTypeID($name[0]);
 					$keyword = Keywords::addKey($name[1], $type);
 					Keywords::addTaskUserKeyRelation($task, $user, $keyword);
-					FB::info($type, $keyword);
+					#FB::info($type, $keyword);
 				}				
 			}			
 			return '{
@@ -121,15 +121,15 @@ class TaskerHelper extends Tasker {
 	}
 	public function deleteItem($id){
 		$item = self::getItem($id);
-		FB::info($item, 'ITEM');
+		#FB::info($item, 'ITEM');
 		$sql  = "DELETE FROM `tasks` WHERE `id` = ".$id.";
 			DELETE FROM IGNORE `key_relations` WHERE `task` = ".$id.";
   			DELETE FROM `lists_tasks` WHERE `task` = ".$id.";
   			DELETE FROM `tasks_user` WHERE `task` = ".$id.";";
 
-		FB::log($sql, 'SQL');
+		#FB::log($sql, 'SQL');
 		$result = Site::$db->multi_query($sql);
-		FB::log($result, 'RESULT');
+		#FB::log($result, 'RESULT');
 		if($result){			
 			return '{"status": "success"}';
 		}

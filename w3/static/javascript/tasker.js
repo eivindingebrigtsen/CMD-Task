@@ -315,7 +315,6 @@
 			$('#insert').focus();
 			$('.task-keywords li, aside li').live('click',function(ev){
 				window.location.href= '/CMD-Task/tasks/'+$(this).text();
-
 			}); 
 			$.dateReplace = function(val){
 				  $.ajax({

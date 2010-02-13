@@ -11,7 +11,7 @@ class log {
 		$url = Site::$action.Site::$section.Site::$subsection.Site::$do;
 		$sql = "INSERT INTO  `visits` (`id` , `url` , `date` , `user`, `ip`) VALUES (NULL ,  '". $url ."', NULL,  ".Site::$user.", '".$_SERVER['REMOTE_ADDR']."');";
 		$result = Site::$db->query($sql);
-		FB::info($url,'URL');
+		#FB::info($url,'URL');
 		return true;		
 		
 	}

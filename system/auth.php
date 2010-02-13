@@ -20,12 +20,12 @@ class Auth{
   const VERSION = '0.1';    
 	public function __construct(){		
 		if(empty($_SESSION['loggedin'])){
-			FB::info('Not authenticated');
+			#FB::info('Not authenticated');
 			$_SESSION['loggedin'] = false;
 		 	self::$authenticated = false;   
 			self::$user = 0; 
 		}else{
-			FB::info('Autenticated');
+			#FB::info('Autenticated');
 			self::$user = 1; // Root ID for now
 			self::$authenticated = true;
 		}
@@ -49,7 +49,7 @@ class Auth{
 	 * @return 	Boolean
 	 */
 	public function authenticateUser ($user = null, $pass = null){
-		FB::log('Authenticated');
+		#FB::log('Authenticated');
 		return true;
 	}
 	/**
@@ -62,14 +62,14 @@ class Auth{
 	public function authenticatePhrase(){
 		$status = 'warning';
 		$phrase = $_POST['phrase'];  
-		FB::log($phrase, 'Logging in with');
+		#FB::log($phrase, 'Logging in with');
 		if($phrase == Site::$defaults['keyphrase']){
 			$status = 'success';
-			FB::log($phrase, 'Logged in');
+			#FB::log($phrase, 'Logged in');
 			$_SESSION['loggedin'] = true;
 			self::$authenticated = true; 
 		}else{
-			FB::log($phrase, 'Not logged in');					
+			#FB::log($phrase, 'Not logged in');					
 			$_SESSION['loggedin'] = false;
 			self::$authenticated = false; 
 
@@ -79,7 +79,7 @@ class Auth{
 		}';
 	} 
 	public function logOut(){
-		FB::info('logging out');
+		#FB::info('logging out');
 		$_SESSION['loggedin'] = false;
 		self::$authenticated = false;
 		return '{loggedout: '.$_SESSION['loggedin'].'}';
