@@ -126,7 +126,7 @@ class Tasker  {
 		return implode($markup, '');
 	}
 	public function getImportInterface(){
-	  Site::$page = Site::parseFile('view/tasker/import.html');  
+	  Site::$page = Site::parseFile('view/tasker/import.phtml');  
 	  Site::$inlinejs .= Site::parseFile('static/javascript/import.js');	
 	}
 	public function getInterface(){	    		
@@ -134,9 +134,9 @@ class Tasker  {
 		Site::$vars['section'] 	= ''.Site::$section. '';
 		Site::$vars['aside']  	= self::getAside();
 		Site::$vars['items']  	= self::writeLists();
-		Site::$header 			= Site::parseFile('view/tasker/top.html');
-		Site::$page 			= Site::parseFile('view/tasker/dashboard.html');
-		Site::$footer 			= Site::parseFile('view/tasker/bot.html');
+		Site::$header 			= Site::parseFile('view/tasker/top.phtml');
+		Site::$page 			= Site::parseFile('view/tasker/dashboard.phtml');
+		Site::$footer 			= Site::parseFile('view/tasker/bot.phtml');
 		Site::$inlinejs 		.= self::getInputJs();
 	}
 	public function interpret ($string){

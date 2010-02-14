@@ -85,7 +85,7 @@ class Auth{
 		return '{loggedout: '.$_SESSION['loggedin'].'}';
 	}
 	public function displayLogin(){
-		return include('view/global/login_form.php');
+		return include('view/global/login_form.phtml');
 	}
 	public function loginJs(){		
 		return Site::parseFile('static/javascript/login.js');

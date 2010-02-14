@@ -160,8 +160,8 @@ class Site {
 			self::$vars['footer'] 	= self::$footer;
 
 			$html = self::$page;
-			$head = self::parseFile('view/global/header.html');      
-			$foot = self::parseFile('view/global/footer.html');
+			$head = self::parseFile('view/global/header.phtml');      
+			$foot = self::parseFile('view/global/footer.phtml');
 			echo <<<HTML
 			{$head}
 			<section class="container"> 

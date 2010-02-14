@@ -17,7 +17,7 @@ class log {
 	}
 	public function getAnalytics(){
 		Site::$vars['code'] = $this->configuration['analytics'];
-		return Site::parseFile('view/global/analytics.html');
+		return Site::parseFile('view/global/analytics.phtml');
 	}
 	private function loadConfiguration() {
 	    $config_obj = Config::getInstance();
