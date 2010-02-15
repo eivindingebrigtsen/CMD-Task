@@ -70,7 +70,7 @@
 				me = $('#input');
 				keywords = [];
 				var all = ''; 
-				me.find('li').text(function(i,t){
+				me.find('li:not(.result)').text(function(i,t){
 					all += t+ ' ';
 				});
 				me.find('li.keyword').each(function(){
@@ -121,7 +121,7 @@
 				$(document).data('desc', false);
 				var type;
 				switch(val){
-					{$handleshortcuts}
+   				{$handleshortcuts}
 				}
 				if (type){
 					$(document).data('keyword', true);					
@@ -168,7 +168,6 @@
 						.addClass(ins.attr('class'))
 						.appendTo('#input');
 				}     
-				console.log()
 				ins.removeAttr('value')
 					.removeAttr('class')
 					.parent()
@@ -224,9 +223,9 @@
 
 			$('#input').bind('click', function(){
 				$('#insert').focus();
-			})
+			});
 
-			$(document).data('desc', false)
+			$(document).data('desc', false);
 			$('#insert').attr('autocomplete', 'off');
 			$('#insert').bind('keyup', {combi:'ctrl+a', disableInInput: false}, function(){
 				var nodes = $('#input').find('li:not(#holder)');
@@ -255,10 +254,10 @@
 					ins.css('width', 'auto');
 				}
 				
-				
+				var index;
 				/*  Handle delete */
 				if(ev.keyCode  === 8 && val === ''){
-					var index = $('li').index(ins.parent());
+					index = $('li').index(ins.parent());
 					ins.val(ins.parent().prev().text());
 					ins.removeAttr('class').parent().prev().remove();
 				  	return true;
@@ -266,7 +265,7 @@
 				}
 				/*  Handle Back arrow at pos 0 */
 				if(ev.keyCode  === 37 && doGetCaretPosition(this) === 0){
-					var index = $('li').index(ins.parent());
+					index = $('li').index(ins.parent());
 					var prevt = ins.parent().prev().text();
 					var pos = prevt.length+1;
 					ins.val(prevt+' '+val);
@@ -331,5 +330,5 @@
 						    $('.date_replace').removeClass('date_replace');
 						}					    
 					}});
-			}
+			};
 		});

@@ -3,14 +3,16 @@
 * 
 */
 class ListsHelper extends Lists
-{
+{  
+	public static $lists;
 	function __construct()
 	{
+		self::getLists();
 	}
 	public function getLists(){
 		//#FB::info(Site::$user, 'User');
 		if(Site::$user){			
-			parent::$lists = array();
+			self::$lists = array();
 			$sql = "SELECT `lists`.`id`, `lists`.`name`
 					FROM `list_user` 
 					INNER JOIN `lists`
@@ -18,8 +20,8 @@ class ListsHelper extends Lists
 					WHERE `list_user`.`user` = ". Site::$user .";";
 			$result = Site::$db->query($sql);
 			while($list = $result->fetch_assoc()){				   
-					parent::$lists[$list['id']]['list'] = $list;
-					parent::$lists[$list['id']]['tasks'] = self::getTasks($list['id']);					
+					self::$lists[$list['id']]['list'] = $list;
+					self::$lists[$list['id']]['tasks'] = self::getTasks($list['id']);					
 			}
 			//#FB::info(self::$lists,'SELF List');
 		}

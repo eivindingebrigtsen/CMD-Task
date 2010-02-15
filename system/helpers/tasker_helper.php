@@ -3,46 +3,72 @@ class TaskerHelper extends Tasker {
 	public function __construct(){
 		parent::__construct();
 	}
-	public function addItem(){
-		$nada 	= true;
-		$raw 	= false;
-		$text 	= false;
-		$desc 	= NULL;
-		$date 	= 0;
-		$keys 	= false;
+	public function getPostData(){
+		#FB::error($_POST, "POST");
+		$data = array();
+		$data['nada'] 	= true;
+		$data['raw'] 	= false;
+		$data['text'] 	= false;
+		$data['desc'] 	= 'NULL';
+		$data['date'] 	= 'NULL';
+		$data['keys'] 	= false;
 		if(isset($_POST['raw']) && trim($_POST['raw']) != ''){
-			$raw = $_POST['raw'];
-			$nada = false;
+			$data['raw'] = $_POST['raw'];
+			$data['nada'] = false;
 			if(isset($_POST['text'])){
-				$text = $_POST['text'];
+				$data['text'] = $_POST['text'];
 			}
 			if(isset($_POST['desc'])){
-				$desc = $_POST['desc'];
+				$data['desc'] = $_POST['desc'];
 			}
 			if(isset($_POST['date'])){
-				$date = strtotime($_POST['date']);
+				$data['date'] = strtotime($_POST['date']);
 			}
 			if(isset($_POST['keys'])){
-				$keys = $_POST['keys'];
+				$data['keys'] = $_POST['keys'];
 			}
 		}
-		#FB::info($nada, 'Nothing here?');
-		if(!$nada){ 
-			#FB::info($raw, 'adding');
-			$sql = "INSERT INTO  `tasks` (`id` , `text` , `raw_string` , `desc` , `date` , `date_created` , `date_updated`) 
-					VALUES (NULL ,  '". $text ."', '". $raw ."',  '". $desc ."',  ".$date.",  ". time().",  ". time() .");";
-			$result = Site::$db->query($sql);
-			$task = Site::$db->insert_id;
+		return $data;
+		
+	}
+	public function addRelations($name, $type, $task){
+		$type = Keywords::getTypeID($type);
+		if($type){
+			$keyword = Keywords::addKey($name, $type);
+			Keywords::addTaskUserKeyRelation($task, Site::$user, $keyword);
+		}
+	}
+	public function writeTask($data){
+		$sql = "INSERT INTO  `tasks` (`id` , `text` , `raw_string` , `desc` , `date` , `date_created` , `date_updated`) 
+				VALUES (NULL ,  '". $data['text'] ."', '". $data['raw'] ."',  '". $data['desc'] ."',  ".($data['date'] ? $data['date'] : 'NULL' ).",  ". time().",  ". time() .");";
+		$result = Site::$db->query($sql);
+		return Site::$db->insert_id;
+	}
+	public function addItem($data){
+		if(!$data){
+		   $data = self::getPostData(); 
+		}
+		#FB::info($data['nada'], 'Nothing here?');
+		if(!$data['nada']){ 
+			#FB::info($data, 'adding');
+			$task = self::writeTask($data);
+			#FB::log($data, $task);
 			$user = Site::$user;
 			$list = 1;
 			self::addTaskUserRelation($task, $user);
 			ListsHelper::addListTaskRelation($list, $task);
-			if($keys){
-				foreach($keys as $key => $name){
-					$type = Keywords::getTypeID($name[0]);
-					$keyword = Keywords::addKey($name[1], $type);
-					Keywords::addTaskUserKeyRelation($task, $user, $keyword);
-					#FB::info($type, $keyword);
+			if($data['keys']){
+				foreach($data['keys'] as $key => $name){
+					if(is_array($name)){
+						foreach($name as $key => $name){
+							#FB::info($name, $key);
+							self::addRelations($name, $key, $task);
+						}
+					}else{
+						#FB::info($name, $key);
+							self::addRelations($name, $key, $task);
+					}
+					#FB::info($name, $key);
 				}				
 			}			
 			return '{

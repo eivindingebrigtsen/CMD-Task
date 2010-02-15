@@ -129,7 +129,7 @@ class Site {
 				$content .= $line;
 			}                 
 			# Stripping all new lines, returns and tabs 
-			return preg_replace('/(\n|\r|\t)/', '', $content);
+			return $content; //preg_replace('/(\n|\r|\t)/', '', $content);
 		}
 	}
 
@@ -174,10 +174,11 @@ HTML;
 				echo self::$response;
 		} else {
 			echo 'no output';
-		}
+		}  
 	
 	}
 	private function getDebug(){
+		require('../ext/FirePHPCore/FirePHP.class.php');
 		#FB::setEnabled(self::$debug['debug']);   
 		self::$db->getDebug();
 		#FB::log($_SERVER, 'SERVER');		

@@ -70,7 +70,7 @@
 $('#textarea').bind('blur', function(e){
 		e.preventDefault();
 		var he = $(this);
-		var txt = he.text();
+		var txt = he.val();
 	 $.ajax({
 				  url: 'tasks/interpret/',
 				  data: {

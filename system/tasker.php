@@ -18,7 +18,7 @@ class Tasker  {
 		$helper = new TaskerHelper();
 		switch($offset){
 			case 'add':   
-				Site::$response = $helper->addItem();
+				Site::$response = $helper->addItem(false);
 			break;
 
 			case 'delete':  
@@ -142,7 +142,7 @@ class Tasker  {
 	public function interpret ($string){
 		$import = new StringImport();
 		$text = $import->interpret($string);
-		#FB::error($text);
+		#FB::info($text);
 		return $text;
 	}
 	

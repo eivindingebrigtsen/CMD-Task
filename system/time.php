@@ -28,7 +28,7 @@ class Time {
 		}
 		
 	}
-	private function getDate($str){
+	public function getDate($str){
 		if(is_numeric($str)){
 		   return strftime('%d %B %G', $str); 
 		}
@@ -52,6 +52,11 @@ class Time {
 			}';
 		}
 	}                 
+	public function strToTime($str){
+		if(function_exists("date_default_timezone_set") and function_exists("date_default_timezone_get"))
+		@date_default_timezone_set(@date_default_timezone_get());
+		return strtotime($str);
+	}
 	public function timeTo($date){
 		$time = time();
 		$dateDiff = ($date+self::DAY)-$time;

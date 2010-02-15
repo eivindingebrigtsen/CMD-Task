@@ -118,6 +118,7 @@ class Keywords {
 		while($obj = $result->fetch_assoc()){				   
 			return $obj['id'];
 		}
+		return false;
 	}   
 	
 	public function addTaskUserKeyRelation($task, $user, $keyword){
