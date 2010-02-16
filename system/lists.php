@@ -45,6 +45,9 @@ class Lists {
 			#FB::error('@todo location.hash js');
 			$helper->getLists();
 		}
+		if(!isset($helper->lists)){
+			$helper->getLists();
+		}
 	 	self::$lists = $helper->lists;	
 }
 
