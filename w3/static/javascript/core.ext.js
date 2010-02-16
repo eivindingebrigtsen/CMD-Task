@@ -593,7 +593,7 @@ USAGE:
 Note:
  This plugin wraps the following jQuery methods: $.fn.find, $.fn.bind and $.fn.unbind
  
-*/
+
 (function (jQuery) {
     // keep reference to the original $.fn.bind and $.fn.unbind
     jQuery.fn.__bind__ = jQuery.fn.bind;
@@ -845,7 +845,7 @@ Note:
     // place it under window so it can be extended and overridden by others
     window.hotkeys = hotkeys;
     return jQuery;
-})(jQuery);
+})(jQuery);   */
 
 (function($) {
 		var self = null;

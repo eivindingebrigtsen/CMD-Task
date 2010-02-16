@@ -2,6 +2,7 @@
 class Tasker  {
 	public static $items;
 	public static $tags;
+	public static $list;
 	public static $lists;
 	public static $projects;
 	public static $keywords;
@@ -16,6 +17,9 @@ class Tasker  {
   	}
 	public function offsetGet($offset){
 		$helper = new TaskerHelper();
+		self::$keywords = new Keywords();				
+		self::$list = new Lists();				
+
 		switch($offset){
 			case 'add':   
 				Site::$response = $helper->addItem(false);
@@ -61,6 +65,7 @@ class Tasker  {
 			 	$helper->getItem(Site::$subsection);
 			break;
 			case 'import':
+				$list = new Lists();				
 				self::getImportInterface();
 			break;
 			case 'setup':
@@ -68,9 +73,7 @@ class Tasker  {
 			break;
 			default:   
 				#FB::error($offset, 'OFFSET NOT KNOWN');				
-				self::$keywords = new Keywords();				
-				$list = new Lists();				
-				self::$lists = $list->offsetGet($offset);
+				self::$list->offsetGet($offset);
 				self::getInterface();			
 			break;
 		}
@@ -78,42 +81,45 @@ class Tasker  {
 	}
     	public function writeLists(){  	
 			$markup = array();
-			$markup[] = '<ul id="tasks">';
-			#FB::info(Lists::$lists, 'LISTS');
-			if(Lists::$lists){
-				foreach(Lists::$lists as $list){
+			$markup[] = '<ul id="tasks">';			
+			FB::info(self::$list->lists, 'LISTS');
+			if(isset(self::$list->lists)){
+				
+				foreach(self::$list->lists as $list){
 					#FB::log($list,'List');
 					$markup[] = '<li><h2>'. $list['list']['name']. '</h2>';
 					$markup[] = '<ul id="'. $list['list']['name']. '">';
-					foreach($list['tasks'] as $task){
-						$keys = array();
-						$class = array();
-						$keys[] = '<div class="task-keywords"><ul class="task-keywords">';
-						$done = ($task['done'] ? 'done' : 'todo' );
+				 if($list['tasks']){
+					 foreach($list['tasks'] as $task){
+							$keys = array();
+							$class = array();
+							$keys[] = '<div class="task-keywords"><ul class="task-keywords">';
+							$done = ($task['done'] ? 'done' : 'todo' );
 
-						foreach($task['keywords'] as $type){
-							foreach($type as $key){					
-							$keys[] = '<li class="'.$key['type'].'">';
-							$keys[] = '<span>'.$key['code'].$key['keyword'].'</span>';
-							$keys[] = '</li>';
-							$class[] = $key['keyword'];
-						  }  
+							foreach($task['keywords'] as $type){
+								foreach($type as $key){					
+								$keys[] = '<li class="'.$key['type'].'">';
+								$keys[] = '<span>'.$key['code'].$key['keyword'].'</span>';
+								$keys[] = '</li>';
+								$class[] = $key['keyword'];
+							  }  
+							}
+							$keys[] = '</ul></div>';
+							$markup[] = '<li id="task_'.$task['id'].'" class="task '.implode(' ',$class).' '. $done .'"><div class="task-item">';
+							$markup[] = '<input type="hidden" name="id" value="'. $task['id']. '" />';
+							$markup[] = '<span class="task-raw">'. $task['raw']. '</span>';
+							$markup[] = '<span class="task-delete">X</span>';
+							$markup[] = '<span class="task-done '. $done .'"></span>';
+							$markup[] = '<span class="task-text">'. $task['text']. '</span>';
+							$markup[] = '<span class="task-desc">'. $task['desc']. '</span>';
+							$markup[] = '<div class="task-meta">';
+							$markup[] = implode($keys, '');
+							if($task['date']>0){
+								$markup[] = '<span class="task-date">Due in '. Time::timeTo($task['date']). '</span>';
+							}
+							$markup[] = '<span class="task-updated">Updated '. Time::timeSince($task['date_updated']). '</span>';
+							$markup[] = '</div></div></li>';
 						}
-						$keys[] = '</ul></div>';
-						$markup[] = '<li id="task_'.$task['id'].'" class="task '.implode(' ',$class).' '. $done .'"><div class="task-item">';
-						$markup[] = '<input type="hidden" name="id" value="'. $task['id']. '" />';
-						$markup[] = '<span class="task-raw">'. $task['raw']. '</span>';
-						$markup[] = '<span class="task-delete">X</span>';
-						$markup[] = '<span class="task-done '. $done .'"></span>';
-						$markup[] = '<span class="task-text">'. $task['text']. '</span>';
-						$markup[] = '<span class="task-desc">'. $task['desc']. '</span>';
-						$markup[] = '<div class="task-meta">';
-						$markup[] = implode($keys, '');
-						if($task['date']>0){
-							$markup[] = '<span class="task-date">Due in '. Time::timeTo($task['date']). '</span>';
-						}
-						$markup[] = '<span class="task-updated">Updated '. Time::timeSince($task['date_updated']). '</span>';
-						$markup[] = '</div></div></li>';
 					}
 					$markup[] = '</ul></li>';
 				}
@@ -126,8 +132,14 @@ class Tasker  {
 		return implode($markup, '');
 	}
 	public function getImportInterface(){
-	  Site::$page = Site::parseFile('view/tasker/import.phtml');  
-	  Site::$inlinejs .= Site::parseFile('static/javascript/import.js');	
+		self::$keywords = new Keywords();				
+		Site::$title  					= 'cmdtask/'.Site::$section. '';
+		Site::$vars['section'] 	= ''.Site::$section. '';
+		Site::$vars['aside']  	= self::getAside();
+		Site::$vars['items']  	= self::writeLists();
+		Site::$header 					= Site::parseFile('view/tasker/top.phtml');
+	  Site::$page 						= Site::parseFile('view/tasker/import.phtml');  
+	  Site::$inlinejs 				.= Site::parseFile('static/javascript/import.js');	
 	}
 	public function getInterface(){	    		
 		Site::$title 			= 'cmdtask/'.Site::$section. '';
@@ -135,9 +147,10 @@ class Tasker  {
 		Site::$vars['aside']  	= self::getAside();
 		Site::$vars['items']  	= self::writeLists();
 		Site::$header 			= Site::parseFile('view/tasker/top.phtml');
-		Site::$page 			= Site::parseFile('view/tasker/dashboard.phtml');
+		Site::$page 			= Site::parseFile('view/tasker/import.phtml');
 		Site::$footer 			= Site::parseFile('view/tasker/bot.phtml');
-		Site::$inlinejs 		.= self::getInputJs();
+	  Site::$inlinejs 				.= Site::parseFile('static/javascript/import.js');	
+//		Site::$inlinejs 		.= self::getInputJs();
 	}
 	public function interpret ($string){
 		$import = new StringImport();

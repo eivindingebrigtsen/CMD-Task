@@ -1,4 +1,4 @@
-                              	$.dateReplace = function(val){
+$.dateReplace = function(val){
  $.ajax({
 			  url: 'tasks/date/'+val,
 			  dataType: 'json',
@@ -14,7 +14,7 @@
 			}});
 		
 	};
-	$.datesReplace = function(arr){
+$.datesReplace = function(arr){
  $.ajax({
 			  url: 'tasks/dates/',
 			  data: {
@@ -24,8 +24,8 @@
 			  type: 'POST',
 			  success: function(data,status){
 				if(data.status === 'success'){
- $('.date_replace').each(function(i,v){
- $(this)
+					$('.date_replace').each(function(i,v){
+ 						$(this)
 						.text(data.dates[i])
 						.removeClass('date_replace');
 						
@@ -67,23 +67,29 @@
 		txt = txt.replace(/\/\*[\d\D]*?\*\//g,'<p class="task-desc">$&</p>'); 
 		return txt;
 	};
-$('#textarea').bind('blur', function(e){
+	$(document).bind('keyup', function(e){
 		e.preventDefault();
-		var he = $(this);
-		var txt = he.val();
-	 $.ajax({
-				  url: 'tasks/interpret/',
-				  data: {
-					"raw": txt
-				  },
-				  dataType: 'json',
-				  type: 'POST',
-				  success: function(data,status){
-					console.log(data,status)
-				}});
+//		console.log('hey');
+		if(e.ctrlKey && e.keyCode === 13){
+				var he = $('#textarea');
+				var txt = he.val();
+			 $.ajax({
+			  url: 'tasks/interpret/',
+			  data: {
+				"raw": txt
+			  },
+			  dataType: 'json',
+			  type: 'POST',
+			  complete: function(data,status){
+					//console.log('hey');
+					he.val('');
+					$('aside').empty().load('tasks/keys');
+					$('section.content').empty().load('tasks/tasks');
+			}});			
+		}
 
-
-//		txt = replaceSyntax(txt);
-//		me.html(txt).focus();				
 	});
 $('#editable').focus();
+$('aside li').live('click',function(ev){
+	window.location.href= '/CMD-Task/tasks/'+$(this).text();
+});

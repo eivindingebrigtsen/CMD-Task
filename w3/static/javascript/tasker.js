@@ -312,7 +312,7 @@
 			    /* console.log('KEYCODE', ev.keyCode, 'VAL L', val.length) */
 			});
 			$('#insert').focus();
-			$('.task-keywords li, aside li').live('click',function(ev){
+			$('.task-keywords li').live('click',function(ev){
 				window.location.href= '/CMD-Task/tasks/'+$(this).text();
 			}); 
 			$.dateReplace = function(val){

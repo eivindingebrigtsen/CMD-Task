@@ -90,7 +90,7 @@ class Site {
 		 	return;
 	    }
 		switch( Site::$action ){
-			case 'tasks':
+			default :
 				$tasker = new Tasker();
 				$tasker->offsetGet(Site::$section, Site::$subsection, Site::$do);
 				//#FB::info($tasker, 'Tasker');
@@ -178,10 +178,12 @@ HTML;
 	
 	}
 	private function getDebug(){
-		require('../ext/FirePHPCore/FirePHP.class.php');
-		#FB::setEnabled(self::$debug['debug']);   
-		self::$db->getDebug();
-		#FB::log($_SERVER, 'SERVER');		
+		if(file_exists('../ext/FirePHPCore/FirePHP.class.php')){
+			require('../ext/FirePHPCore/FirePHP.class.php');
+			FB::setEnabled(self::$debug['debug']);   
+			self::$db->getDebug();
+			FB::log($_SERVER, 'SERVER');					
+		}
 	}
 }
 ?>

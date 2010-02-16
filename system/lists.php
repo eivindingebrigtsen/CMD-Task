@@ -3,7 +3,9 @@ class Lists {
 	public static $lists;	
 	public static $helper; 
 	public function __construct() {		
-  	} 
+//  		$helper = new ListsHelper();  		
+// 		self::$lists = $helper->getLists();
+	} 
 	public function offsetGet($offset){
 		$helper = new ListsHelper();  		
 		if($offset){
@@ -19,9 +21,13 @@ class Lists {
 				if($exists !== false){
 					if($matches[2]){
 						$helper->getTasksByKeyword($matches[2], $exists);
-						#FB::info($helper, 'Tasks for Keyword');						
+						FB::info($helper->lists, 'Tasks for Keyword');
+						$this->lists = $helper->lists;
+						Site::$section = $matches[0];
 					}else{
 						$helper->getKeynamesByKeyType($exists);
+						FB::info($helper->lists, 'Tasks for Keyword');
+						$this->lists = $helper->lists;
 					}
 				}				
 			}else{
@@ -32,7 +38,9 @@ class Lists {
 					$type = array_search('/', $keys);
 					#FB::log($type, 'TYPE');
 					$helper->getTasksByKeyword($offset, $type);
-					#FB::info(self::$lists, 'Tasks for Keyword 2');
+					Site::$section = '/'.$offset;
+					FB::info($helper->lists, 'Tasks for Keyword 2');
+					$this->lists = $helper->lists;
 				}else{
 					#FB::error($offset, 'We don\'t know this');
 				}
@@ -44,7 +52,6 @@ class Lists {
 			#FB::error('@todo location.hash js');
 			$helper->getLists();
 		}
-		self::$lists = $helper->lists;		
 	}
 
   
