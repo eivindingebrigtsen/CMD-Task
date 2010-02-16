@@ -90,7 +90,7 @@ class Site {
 		 	return;
 	    }
 		switch( Site::$action ){
-			default :
+			case 'tasks':
 				$tasker = new Tasker();
 				$tasker->offsetGet(Site::$section, Site::$subsection, Site::$do);
 				//#FB::info($tasker, 'Tasker');
@@ -129,7 +129,7 @@ class Site {
 				$content .= $line;
 			}                 
 			# Stripping all new lines, returns and tabs 
-			return $content; //preg_replace('/(\n|\r|\t)/', '', $content);
+			return preg_replace('/(\n|\r|\t)/', '', $content);
 		}
 	}
 
@@ -174,7 +174,7 @@ HTML;
 				echo self::$response;
 		} else {
 			echo 'no output';
-		}  
+		}
 	
 	}
 	private function getDebug(){

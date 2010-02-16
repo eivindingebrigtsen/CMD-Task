@@ -41,7 +41,7 @@ class StringImport extends ImportThingy
 		foreach($string_array as $line){
 			$data = array();			
 			$match = $this->tryMatch($line);
-			##FB::info($match,'MATCH FOR LINE');                                                                         	
+			FB::info($match,'MATCH FOR LINE');                                                                         	
 			if(!array_key_exists('break', $match)){
 				if(!array_key_exists('task', $match)){
 					$keywords[] = $match;
@@ -66,11 +66,11 @@ class StringImport extends ImportThingy
 			}else{
 				$pop = array_pop($keywords);
 			}
-		##FB::log($data, 'DATA');
+		FB::log($data, 'DATA');
 		}
-		##FB::log($keywords, 'Keywords');
+		FB::log($keywords, 'Keywords');
 		
-		##FB::log($matches, 'Interpret Tasks');
+		FB::log($matches, 'Interpret Tasks');
 	}
 	
 	
@@ -93,7 +93,7 @@ class StringImport extends ImportThingy
 					$matches[$key] = substr($match[0][0], 1);
 				}
 				if($key == 'task'){
-					##FB::info($matches, 'TASK');
+					FB::info($matches, 'TASK');
 					$matches['title'] = $this->removeKeys($match[0][0]);
 				}
 			}
@@ -101,7 +101,7 @@ class StringImport extends ImportThingy
 		if(!$matched){
 			$matches['break'] = true;
 		}
-		##FB::log($matches, $string);
+		FB::log($matches, $string);
 		return $matches;
 	}
 	public function removeKeys($string){

@@ -69,7 +69,6 @@ $.datesReplace = function(arr){
 	};
 	$(document).bind('keyup', function(e){
 		e.preventDefault();
-//		console.log('hey');
 		if(e.ctrlKey && e.keyCode === 13){
 				var he = $('#textarea');
 				var txt = he.val();
@@ -81,15 +80,14 @@ $.datesReplace = function(arr){
 			  dataType: 'json',
 			  type: 'POST',
 			  complete: function(data,status){
-					//console.log('hey');
 					he.val('');
 					$('aside').empty().load('tasks/keys');
-					$('section.content').empty().load('tasks/tasks');
+					$('section.content').empty().load('tasks/tasks/section');
 			}});			
 		}
 
 	});
 $('#editable').focus();
 $('aside li').live('click',function(ev){
-	window.location.href= '/CMD-Task/tasks/'+$(this).text();
+	window.location.href= '/c/tasks/'+$(this).text();
 });

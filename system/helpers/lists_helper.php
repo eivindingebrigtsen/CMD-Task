@@ -3,15 +3,14 @@
 * 
 */
 class ListsHelper extends Lists
-{  
+{
 	function __construct()
 	{
-		self::$lists = self::getLists();
 	}
 	public function getLists(){
-		#FB::info(Site::$user, 'User');
+		//#FB::info(Site::$user, 'User');
 		if(Site::$user){			
-			$lists = array();
+			$this->lists = array();
 			$sql = "SELECT `lists`.`id`, `lists`.`name`
 					FROM `list_user` 
 					INNER JOIN `lists`
@@ -19,13 +18,11 @@ class ListsHelper extends Lists
 					WHERE `list_user`.`user` = ". Site::$user .";";
 			$result = Site::$db->query($sql);
 			while($list = $result->fetch_assoc()){				   
-					$lists[$list['id']]['list'] = $list;
-					$lists[$list['id']]['tasks'] = self::getTasks($list['id']);
+					$this->lists[$list['id']]['list'] = $list;
+					$this->lists[$list['id']]['tasks'] = self::getTasks($list['id']);					
 			}
-			#FB::info(self::$lists,'SELF List');
-			return $lists;
+			FB::info($this->lists,'SELF List');
 		}
-		return false;
 	}
 	public function getTasksByKeyword($keyword, $type){
 		$tasks = array();
@@ -85,14 +82,11 @@ class ListsHelper extends Lists
 				WHERE `lists_tasks`.`list` = ". $list ." AND `tasks`.`hidden` != 1
 				ORDER BY `tasks`.`id` DESC;";				
 		$result = Site::$db->query($sql);		
-		if($result->num_rows > 0){
-			while($task = $result->fetch_object()){				   
-				$item = TaskerHelper::getTaskArray($task);
-				$tasks[]= $item;
-			}
-		return $tasks;
+		while($task = $result->fetch_object()){				   
+			$item = TaskerHelper::getTaskArray($task);
+			$tasks[]= $item;
 		}
-		return false;
+		return $tasks;
 	}
 	public function exists($name){
 		$sql = "SELECT `lists`.`id` 

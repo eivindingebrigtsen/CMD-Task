@@ -24,7 +24,8 @@ class Keywords {
 						self::$keys[ $obj['type'] ][] = $obj;				
 					}
 				}
-			//#FB::info(self::$keys,'User Keywords');
+			FB::info(self::$keys,'User Keywords');
+			FB::log(debug_backtrace(),'User Keywords');
 		}
 	}
 	public function getKeywordsForTask($task){

@@ -4,11 +4,14 @@ Real Simple Task Management. +Task is an online list manager, that aims to be
 
 Syntax:
 ------------------------
-    - A task item that needs to be in some list http://urlthatyouneedtostore.com 
-    @context_or_person /list ?project #topic :remind & _deadline(tomorrow, friday, +3 weeks)
-    // Single line comment or a
-    /* Multiline
-       Comment */
+    /list
+       @laptop
+       #action
+       - send email of notes
+
+       @calls
+       - call client on it tomorrow
+
 
 Dependencies:
 -------------------------
